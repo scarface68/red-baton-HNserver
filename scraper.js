@@ -1,26 +1,30 @@
-const cheerio = require('cheerio');
-const axios = require('axios');
+const cheerio = require("cheerio");
+const axios = require("axios");
 
 // URLs to scrape
-const urls = ["https://news.ycombinator.com", "https://news.ycombinator.com/?p=2", "https://news.ycombinator.com/?p=3"];
+const urls = [
+  "https://news.ycombinator.com",
+  "https://news.ycombinator.com/?p=2",
+  "https://news.ycombinator.com/?p=3",
+];
 
 // Function to convert 'postedOn' string to a timestamp
 function postedOnToTimestamp(postedOn) {
-  const units = postedOn.split(' ')[1];
-  const value = parseInt(postedOn.split(' ')[0]);
+  const units = postedOn.split(" ")[1];
+  const value = parseInt(postedOn.split(" ")[0]);
 
   let multiplier;
   switch (units) {
-    case 'minute':
-    case 'minutes':
+    case "minute":
+    case "minutes":
       multiplier = 60;
       break;
-    case 'hour':
-    case 'hours':
+    case "hour":
+    case "hours":
       multiplier = 60 * 60;
       break;
-    case 'day':
-    case 'days':
+    case "day":
+    case "days":
       multiplier = 60 * 60 * 24;
       break;
     default:
@@ -42,22 +46,29 @@ async function scrapeUrl(url) {
   const newsItems = [];
 
   // Select all elements with the class 'athing'
-  $('tr.athing').each(function() {
+  $("tr.athing").each(function () {
     // Extract the fields from each news item
-    const url = $(this).find('.titleline a').attr('href');
-    const hnUrl = 'https://news.ycombinator.com/item?id=' + $(this).attr('id');
-    const title = $(this).find('.titleline a:first').text();
-    const id = $(this).attr('id');
+    const url = $(this).find(".titleline a").attr("href");
+    const hnUrl = "https://news.ycombinator.com/item?id=" + $(this).attr("id");
+    const title = $(this).find(".titleline a:first").text();
 
     // The 'posted on', 'upvotes', and 'comments' fields are in the next 'tr' sibling
-    const siblingTr = $(this).next('tr');
-    const postedOn = postedOnToTimestamp(siblingTr.find('.age a').text());
-    const postedOnText = siblingTr.find('.age a').text();
-    const upvotes = siblingTr.find('.score').text();
-    const comments = siblingTr.find('.subline a').last().text();
+    const siblingTr = $(this).next("tr");
+    const postedOn = postedOnToTimestamp(siblingTr.find(".age a").text());
+    const postedOnText = siblingTr.find(".age a").text();
+    const upvotes = siblingTr.find(".score").text();
+    const comments = siblingTr.find(".subline a").last().text();
 
     // Add the news item to the array
-    newsItems.push({ id, url, hnUrl, title, postedOn, postedOnText, upvotes, comments });
+    newsItems.push({
+      url,
+      hnUrl,
+      title,
+      postedOn,
+      postedOnText,
+      upvotes,
+      comments,
+    });
   });
 
   return newsItems;
