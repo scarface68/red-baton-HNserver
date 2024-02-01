@@ -47,6 +47,7 @@ async function scrapeUrl(url) {
     const url = $(this).find('.titleline a').attr('href');
     const hnUrl = 'https://news.ycombinator.com/item?id=' + $(this).attr('id');
     const title = $(this).find('.titleline a:first').text();
+    const id = $(this).attr('id');
 
     // The 'posted on', 'upvotes', and 'comments' fields are in the next 'tr' sibling
     const siblingTr = $(this).next('tr');
@@ -56,7 +57,7 @@ async function scrapeUrl(url) {
     const comments = siblingTr.find('.subline a').last().text();
 
     // Add the news item to the array
-    newsItems.push({ url, hnUrl, title, postedOn, postedOnText, upvotes, comments });
+    newsItems.push({ id, url, hnUrl, title, postedOn, postedOnText, upvotes, comments });
   });
 
   return newsItems;
@@ -64,7 +65,6 @@ async function scrapeUrl(url) {
 
 // Function to scrape all URLs
 async function scrapeAllUrls() {
-  // Array to hold all news items
   const allNewsItems = [];
 
   // Scrape each URL
