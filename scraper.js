@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
 const axios = require("axios");
+const NewsItem = require("./models/NewsItem");
 
 // URLs to scrape
 const urls = [
@@ -42,9 +43,6 @@ async function scrapeUrl(url) {
   // Load the HTML into Cheerio
   const $ = cheerio.load(response.data);
 
-  // Array to hold the news items
-  const newsItems = [];
-
   // Select all elements with the class 'athing'
   $("tr.athing").each(function () {
     // Extract the fields from each news item
@@ -59,8 +57,7 @@ async function scrapeUrl(url) {
     const upvotes = siblingTr.find(".score").text();
     const comments = siblingTr.find(".subline a").last().text();
 
-    // Add the news item to the array
-    newsItems.push({
+    const newsItem = new NewsItem({
       url,
       hnUrl,
       title,
@@ -69,26 +66,16 @@ async function scrapeUrl(url) {
       upvotes,
       comments,
     });
+    newsItem.save();
   });
-
-  return newsItems;
 }
 
 // Function to scrape all URLs
 async function scrapeAllUrls() {
-  const allNewsItems = [];
-
   // Scrape each URL
   for (const url of urls) {
-    const newsItems = await scrapeUrl(url);
-    allNewsItems.push(...newsItems);
+    await scrapeUrl(url);
   }
-
-  // Sort the news items in reverse chronological order
-  allNewsItems.sort((a, b) => b.postedOn - a.postedOn);
-
-  console.log(allNewsItems);
 }
 
-// Scrape all URLs
 scrapeAllUrls();
