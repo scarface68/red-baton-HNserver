@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json());
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost:27017/hacker-news")
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connection established"))
   .catch((err) => console.log("MongoDB connection error: ", err));
 
