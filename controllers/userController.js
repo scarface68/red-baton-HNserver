@@ -41,9 +41,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
-    res
-      .header("Authorization", "Bearer " + token)
-      .json({ message: "Logged in successfully" });
+    res.json({ token });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
