@@ -9,6 +9,8 @@ const newsItemSchema = new mongoose.Schema({
   postedOnText: String,
   upvotes: String,
   comments: String,
+  read: { type: [String], default: [] },
+  deleted: { type: [String], default: [] },
 });
 
 const NewsItem = mongoose.model("NewsItem", newsItemSchema);
