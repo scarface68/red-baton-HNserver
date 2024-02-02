@@ -12,9 +12,19 @@ exports.crawlAndAddOrUpdate = async (req, res) => {
 };
 
 exports.markAsRead = async (req, res) => {
-  // Implement logic to mark a news item as read here
+  const newsItem = await NewsItem.findOne({ id: req.params.id }).exec();
+  if (!newsItem.read.includes(req.user.userId)) {
+    newsItem.read.push(req.user.userId);
+    await newsItem.save();
+  }
+  res.json({ message: "Marked as read" });
 };
 
 exports.markAsDeleted = async (req, res) => {
-  // Implement logic to mark a news item as deleted here
+  const newsItem = await NewsItem.findOne({ id: req.params.id }).exec();
+  if (!newsItem.deleted.includes(req.user.userId)) {
+    newsItem.deleted.push(req.user.userId);
+    await newsItem.save();
+  }
+  res.json({ message: "Deleted" });
 };
