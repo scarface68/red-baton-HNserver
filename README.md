@@ -28,6 +28,7 @@ touch .env
 JWT_SECRET_KEY =""
 MONGODB_URI =""
 ```
+# Restart server after adding env variables
 
 # Api endpoints
  - /signup 
