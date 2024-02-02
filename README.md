@@ -1,3 +1,13 @@
+# Dependencies and tech used
+- express.js
+- mongoose
+- cheerio (for scraping)
+- axios
+- jwt
+- bcrypt
+- express-validator
+- cors
+
 # Install and run
 
 ```
