@@ -23,6 +23,12 @@ npm start
 touch .env
 ```
 
+# env variables
+```
+JWT_SECRET_KEY =""
+MONGODB_URI = ""
+```
+
 # Api endpoints
  - /signup 
   - /login
