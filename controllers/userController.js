@@ -1,10 +1,10 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 dotenv.config();
-const { validationResult } = require('express-validator');
+const { validationResult } = require("express-validator");
 
-const User = require('../models/User');
+const User = require("../models/User");
 
 exports.signup = async (req, res) => {
   const errors = validationResult(req);
@@ -32,16 +32,18 @@ exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: 'Invalid credentials' });
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
+      return res.status(400).json({ error: "Invalid credentials" });
     }
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY);
-    res.json({ token });
+    res
+      .header("Authorization", "Bearer " + token)
+      .json({ message: "Logged in successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

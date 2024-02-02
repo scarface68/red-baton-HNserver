@@ -1,11 +1,14 @@
-const NewsItem = require('../models/NewsItem');
+const NewsItem = require("../models/NewsItem");
+const scrapeAllUrls = require("../scraper");
 
 exports.getAll = async (req, res) => {
-  // Implement logic to get all news items here
+  const newsItems = await NewsItem.find({}).exec();
+  res.json(newsItems);
 };
 
 exports.crawlAndAddOrUpdate = async (req, res) => {
-  // Implement logic to crawl HackerNews and add/update news items here
+  scrapeAllUrls();
+  res.json({ message: "Crawling completed" });
 };
 
 exports.markAsRead = async (req, res) => {

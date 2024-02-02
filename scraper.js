@@ -44,12 +44,12 @@ async function scrapeUrl(url) {
   const $ = cheerio.load(response.data);
 
   // Select all elements with the class 'athing'
-  $("tr.athing").each(function () {
+  $("tr.athing").each(async function () {
     // Extract the fields from each news item
     const url = $(this).find(".titleline a").attr("href");
     const hnUrl = "https://news.ycombinator.com/item?id=" + $(this).attr("id");
     const title = $(this).find(".titleline a:first").text();
-
+    const id = $(this).attr("id");
     // The 'posted on', 'upvotes', and 'comments' fields are in the next 'tr' sibling
     const siblingTr = $(this).next("tr");
     const postedOn = postedOnToTimestamp(siblingTr.find(".age a").text());
@@ -57,16 +57,28 @@ async function scrapeUrl(url) {
     const upvotes = siblingTr.find(".score").text();
     const comments = siblingTr.find(".subline a").last().text();
 
-    const newsItem = new NewsItem({
-      url,
-      hnUrl,
-      title,
-      postedOn,
-      postedOnText,
-      upvotes,
-      comments,
-    });
-    newsItem.save();
+    // check if item already exists in the database here (based on the 'id' field) if exists, update it, else create it
+    const existingItem = await NewsItem.findOne({ id });
+
+    if (existingItem) {
+      // If the item exists, update it
+      existingItem.upvotes = upvotes;
+      existingItem.comments = comments;
+      await existingItem.save();
+    } else {
+      // If the item does not exist, create it
+      const newsItem = new NewsItem({
+        id,
+        url,
+        hnUrl,
+        title,
+        postedOn,
+        postedOnText,
+        upvotes,
+        comments,
+      });
+      await newsItem.save();
+    }
   });
 }
 
@@ -78,4 +90,4 @@ async function scrapeAllUrls() {
   }
 }
 
-scrapeAllUrls();
+module.exports = scrapeAllUrls;
