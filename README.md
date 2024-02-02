@@ -18,6 +18,11 @@ npm install
 npm start
 ```
 
+# Create .env at root and add the variables provided via mail
+```
+touch .env
+```
+
 # Api endpoints
  - /signup 
   - /login
