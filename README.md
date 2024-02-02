@@ -26,7 +26,7 @@ touch .env
 # env variables
 ```
 JWT_SECRET_KEY =""
-MONGODB_URI = ""
+MONGODB_URI =""
 ```
 
 # Api endpoints
