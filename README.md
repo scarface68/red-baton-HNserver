@@ -16,5 +16,6 @@ npm start
   - /news-items/:id/delete' (put request handles user deleting item)
 
   # Web Scraper script
-  sraper.js
-  It runs either on command (button available in site) or whenever new user logs in
+  - sraper.js
+  - It runs either on command (button available in site) or whenever new user logs in.
+  - It "crawls the first three pages" as mentioned in the task
