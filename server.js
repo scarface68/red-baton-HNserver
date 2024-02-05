@@ -6,7 +6,7 @@ const routes = require("./routes");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: 'https://hacker-news-clone-6t9o.onrender.com/'}));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 mongoose
   .connect(process.env.MONGODB_URI)
